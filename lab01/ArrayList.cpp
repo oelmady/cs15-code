@@ -53,6 +53,9 @@ int ArrayList::size()
  */
 void ArrayList::insert(string item)
 {
+    if (numItems >= capacity) {
+        expand();
+    }
     arr[numItems] = item;
     numItems++;
 }
@@ -72,7 +75,7 @@ bool ArrayList::remove(string item)
 
     shift();
     numItems--;
-
+    
     return true;
 }
 
@@ -99,7 +102,7 @@ int ArrayList::find(string item)
  *    Returns: nothing
  */
 void ArrayList::shift()
-{
+{ 
     for (int i = 1; i < numItems; i++) {
         if (arr[i - 1] == "") {
             arr[i - 1] = arr[i];

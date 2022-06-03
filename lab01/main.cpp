@@ -22,7 +22,6 @@ bool makeList  (ArrayList &toBuy, string     filename);
 void atStore   (ArrayList &toBuy ,ArrayList &bought);
 void buyItem   (ArrayList &toBuy ,ArrayList &bought, string item);
 void printLists(ArrayList &toBuy, ArrayList &bought);
-void shop(ArrayList &toBuy, ArrayList &bought);
 
 int main(int argc, char *argv[])
 {
@@ -87,30 +86,23 @@ void atStore(ArrayList &toBuy, ArrayList &bought)
 			 << endl << endl;
 
 		while (toBuy.size() > 0) {  /* while there are things to buy */
-			shop(toBuy, bought);
+			string item = "";
+			getline(cin, item);
+			if (item == "Print"){
+				cout << endl;
+				printLists(toBuy, bought);
+				cout << "Next item?\n";
+			} else if (item == "Quit") {
+				cout << "Leaving store!\n\n";
+				printLists(toBuy, bought);
+				return 0;
+			} else {
+				buyItem(toBuy, bought, item);
+			}
 		}
-}
-
-/* helper function shop() within atStore() while loop
- * parameters: ArrayList &toBuy  - shopping  list
- *             ArrayList &bought - purchased list
- * does: Handles main functionality of the program,
- */
-void shop(ArrayList &toBuy, ArrayList &bought) {
-	string item = "";
-	getline(cin, item);
-	if (item == "Print"){
-		cout << endl;
-		printLists(toBuy, bought);
-		cout << "Next item?\n";
-	} else if (item == "Quit") {
-		cout << "Leaving store!\n\n";
-		printLists(toBuy, bought);
-		return;
-	} else {
-		buyItem(toBuy, bought, item);
 	}
 }
+
 /* Function buyItem
  * Parameters: ArrayList &toBuy  - shopping list
  *             ArrayList &bought - purchased list
