@@ -1,0 +1,175 @@
+        Debugging Memory Errors, including Segmentation Faults
+
+                  Mark A. Sheldon, Tufts University
+        ======================================================
+
+As you write more complex programs, it is inevitable that you will get
+some memory errors.  The most common memory error is a segmentation
+fault, though many of you will also likely get a "double free"
+message.
+
+No one can tell you what your problem is based only on the information
+that you have a segmentation fault or a double free --- all we can do
+is tell you what that means.
+
+In this document, I'll tell you what these errors mean, list some
+common causes, and then share debugging secrets of the C++ Jedi
+masters.
+
+
+Common memory errors:  What they mean
+-------------------------------------
+
+A segmentation fault occurs when your program attempts to access or
+alter memory the operating system says you shouldn't.  That's it.
+Your program can have bugs in which it accesses its own memory
+inappropriately, but if you step outside the bound's of your program's
+memory, you get a segmentation fault and the OS kills your program.
+
+A double free occurs when you use delete on the same pointer value
+more than once.  E. g., allocate a struct instance on the heap, delete
+it, and then later delete it again, you'll get a double free error.
+
+You can also get an error when you attempt to free space that isn't in
+the heap.  For example, if the pointer value you give to delete is the
+address of something on the stack you'll see "free():  invalid
+pointer".
+
+
+Common causes of memory errors
+------------------------------
+
+Double and invalid frees are self-explanatory.  A typical cause of a
+double free is making multiple copies of an address you get from new,
+and then using delete on each copy.  Invalid frees often result from
+not understanding delete and putting an ampersand to the left of a
+stack variable as an argument to delete or from storing the address
+the of a stack variable in a data structure that subsequently deletes
+that field.
+
+Segmentation faults, however, have a variety of causes.  Here are the
+most common ones students encounter in an introductory course:
+
+    o Indexing (well) beyond the bounds of an array.  If you are well
+      out of bounds, the access will create a segmentation fault.  If
+      you update something just slightly outside the bounds of an
+      array, you will alter some other memory, and that can lead to a
+      segmentation fault much later.
+    o Neglecting to return a value from a function whose return type
+      is not void.  Be careful!  If you promise a return value from a
+      function, you must return something in ALL cases.  The compiler
+      will warn you about this:  "control reaches end of non-void
+      function."  Do not ignore this message!
+    o Dereferencing a null pointer.  The null pointer, by definition,
+      is not actually the address of anything, and so dereferencing it
+      is an error.  You dereference a pointer with the * or ->
+      operators and sometimes with the [] operator (when you are
+      treating the pointer as the address of the beginning of an
+      array).
+    o Dereferencing uninitialized pointers.  Pointers are like integers
+      or floats in that declaring a variable without an explicit
+      initialization means the variable can contain anything.  Some
+      compilers will initialize pointer variables to the null pointer,
+      but some don't.  Using the variable before you give it a value
+      can lead to a segmentation fault (if you're lucky!).
+
+      A particularly common instance of this problem arises when
+      students program as if a pointer to a Node struct creates a Node
+      (it doesn't).  For example:
+
+          struct Node {
+                  int          data;
+                  struct Node *next;
+          };
+
+          ...
+          
+                  Node *aNewNode;
+ 
+                  aNewNode->data = 0;          // BUG!!
+                  aNewNode->next = nullptr;    // BUG!!
+          
+      In the above example, the programmer allocated an uninitialzed
+      variable that can hold the address of a Node.  This does not
+      create a Node.  If you want to use this variable, you have to
+      store the address of a Node in there yourself.  For example:
+
+          aNewNode = new Node;
+
+      After this line, there is a Node on the heap, and the address of
+      that Node is stored in aNewNode (unless the program ran out of
+      memory).
+
+When we get to classes, we'll see that one way to get double frees
+involves passing instances of your classes by value and/or assigning
+an instance of a class to a variable that contains another instance.
+For now, just avoid doing that.  Pass instances by reference (you can
+pass a pointer to it).  Don't use assignment on instances of your
+classes.  Otherwise, you have to learn about copy constructors and
+overloading the assignment operator, which we don't cover in this
+class.  You are welcome to read about these things, but I encourage
+you to avoid the problem for now.
+
+
+Debugging secrets of the C++ Jedi masters
+-----------------------------------------
+
+When your program has a bug, this means that either you have an
+erroneous conception of the problem, or an erroneous solution to the
+problem, or an erroneous encoding of your solution to the problem.
+
+You can stare at the program and think, but, if that doesn't yield
+results in a few minutes, then you need to take action.
+
+Caution:  Do NOT just make various changes to your program hoping to
+make the error go away.  I call this the "poke it with a stick"
+method.  Just adding, removing, or rearranging *'s or &'s using trial
+and error is a way to transform a program you wrote but whose behavior
+you don't understand into a program you didn't actually write and
+whose behavior you don't understand.  No good will come of this!
+
+The first step is to try to figure out where things are going wrong.
+
+Use debug output to trace your program.
+
+Secret #1:  Strategically place debug print statements in your
+program.  A useful way to proceed is to put a print statement at the
+start and end of various (or even all) functions.  The debug print
+statements should be useful and not just something like "b" or
+"here".  Print out "Entering findMax" and "Leaving findMax" at least.
+If your program prints the entering message and not the leaving
+message, then you are closer to knowing where the program is crashing
+or going wrong!
+
+===> Always put a new line at the end of a debug print statement. <===
+
+Secret #2:  It's even better to print out parameter values when you
+enter a function and return values, when you have them.  If you see
+that a findMax gets an array with [-1, 2, 4, 0] and returns 0, then
+you've found a bug.
+
+Secret #3:  Within a function you can print out helpful messages,
+too.  "Starting loop to find where to insert node", "inserting new
+node after element with name Sam".
+
+Secret #4:  Once you know where a program is crashing or going wrong,
+print out ALL THE RELEVANT VARIABLE VALUES --- and this includes
+pointer values.  The null pointer on our system will print 0x0.
+
+Many students don't want to print pointer values, because they don't
+know what 0x601010 means.  You don't have to know what it means,
+though a few bits of information can be helpful.  If you print out a
+pointer you're about to delete and then later do that again, and you
+see the same pointer, you've just figured out where a double free is
+coming from.  That is, you may not know exactly what 0x601010 means,
+but you can tell whether it's the same as another value or different.
+You can tell whether two nodes have next fields pointing to the same
+node, for example, or even whether a node points to itself.  You can
+tell whether a pointer is 0x0, which is how the null pointer prints
+out.
+
+Pointers that begin 0x7ff...  are usually on the stack.  If you get an
+invalid pointer error in free(), and the value looks like that, then
+you have given delete an address of a stack allocated variable rather
+than an address of a heap allocated variable.  Now you can try to
+isolate how that happened.
