@@ -15,26 +15,41 @@ using namespace std;
 
 int main() {
     cout << "bismillah..." << endl;
-    char w[] = "wow";
-    CharLinkedList wow(w, 3);
-    char am[] = "amazing";
-    CharLinkedList amazing(am, 7);
-    
-    wow = amazing;
-    CharLinkedList a;
-    a.concatenate(&amazing);
-    cout << wow.toString() << endl;
-    cout << a.toString() << endl;
-    cout << amazing.toString() << endl;
 
-    try 
+    char followX[] = {'0', '1', '2', '3', 'X', '5', '6', '7', '8'};
+    CharLinkedList list1(followX, 9);
+    cout << list1.toString() << endl;
+
+    try
     {
-        
-    } 
-    catch (const runtime_error &e) 
-    {
-        cerr << e.what() << endl;
+        // test elementAt() while removing elements from front and back of 
+        // list. We keep track of the 'X' in the middle as we make each pass in
+        // the for loop.
+        for (int i = 0; i < 8; i++) {
+            if (i % 2 == 0) {
+                list1.popFromBack();
+                if (list1.elementAt(list1.size() / 2) != 'X') {
+                    throw std::runtime_error("elementAt() was incorrect!");
+                }
+            } else {
+                list1.popFromFront();
+                if (list1.elementAt((list1.size() / 2)) != 'X') {
+                    throw std::runtime_error("elementAt() was incorrect!");
+                }
+            }
+            cout << list1.toString() << endl;
+        }
     }
+    catch(const std::runtime_error& e)
+    {
+        std::cerr << e.what() << '\n';
+        return 0;
+    }
+    
+
+    std::cout << "Student correctly kept track of elementAt() while removing "
+                 "elements."
+              << std::endl;
 
     cout << "alhamdulillah!" << endl;
     return 0;

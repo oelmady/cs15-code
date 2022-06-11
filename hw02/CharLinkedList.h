@@ -30,7 +30,6 @@ public:
     int size() const; 
     char first() const; 
     char last() const;
-
     char elementAt(int index) const;
     string toString() const;
 
@@ -40,34 +39,48 @@ public:
     void insertInOrder(char c);
     void popFromFront();
     void popFromBack();
-    void removeAt(int index);
+    void removeAt(int index); //
     void replaceAt(char c, int index);
-
     void concatenate(CharLinkedList *other);
 private:
     int length;
     struct Node 
     {
         char data;
-        Node* next = nullptr;
+        Node* next;
+        Node* prev;
         //constructors 
+        Node()
+        {
+            char data;
+            Node* next = nullptr;
+            Node* prev = nullptr;
+        }
         Node(char c)
         {
             data = c;
             next = nullptr;
+            prev = nullptr;
         }
-        Node(char c, Node* node)
+        Node(char c, Node* next)
         {
             data = c;
-            next = node;
+            next = next;
+            prev = nullptr;
+        }
+        Node(char c, Node* pnext, Node* pprev)
+        {
+            data = c;
+            next = pnext;
+            prev = pprev;
         }
     };
-    Node *front; // a  pointer to the node at the front of the list
-    Node *back; // a pointer to the node at the back of the list
+    Node *front; 
+    Node *back; 
 
     void destroy(Node *node);
-    Node * copyRec(Node *node); 
-    Node * getBack(Node *node); 
+    Node * copyRec(Node *node, Node *pnode); 
+    Node * getNode(int index) const;
 };
 
 #endif
