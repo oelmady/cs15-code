@@ -52,9 +52,9 @@ private:
         //constructors 
         Node()
         {
-            char data;
-            Node* next = nullptr;
-            Node* prev = nullptr;
+            data = 0;
+            next = nullptr;
+            prev = nullptr;
         }
         Node(char c)
         {
@@ -62,10 +62,10 @@ private:
             next = nullptr;
             prev = nullptr;
         }
-        Node(char c, Node* next)
+        Node(char c, Node* pnext)
         {
             data = c;
-            next = next;
+            next = pnext;
             prev = nullptr;
         }
         Node(char c, Node* pnext, Node* pprev)

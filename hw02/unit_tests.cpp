@@ -15,7 +15,27 @@ using namespace std;
 
 int main() {
     cout << "bismillah..." << endl;
+    
+    CharLinkedList a;
+    a.insertAt('b', 0);
+    a.insertInOrder('a');
+    // a.removeAt(1);
+    a.insertInOrder('p');
+    
+    CharLinkedList copy;
+    copy = a;
+    cout << copy.toString() << endl;
+    // copy.replaceAt('z', 0);
+    // copy.concatenate(copy);
+    // CharLinkedList q(a);
+    while (a.size() > 0) 
+    { 
+        a.popFromBack(); 
+        cout << a.toString() << endl;
+    }
 
+
+    /*
     char followX[] = {'0', '1', '2', '3', 'X', '5', '6', '7', '8'};
     CharLinkedList list1(followX, 9);
     cout << list1.toString() << endl;
@@ -45,11 +65,7 @@ int main() {
         std::cerr << e.what() << '\n';
         return 0;
     }
-    
-
-    std::cout << "Student correctly kept track of elementAt() while removing "
-                 "elements."
-              << std::endl;
+    */
 
     cout << "alhamdulillah!" << endl;
     return 0;
