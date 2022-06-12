@@ -16,24 +16,21 @@ using namespace std;
 int main() {
     cout << "bismillah..." << endl;
     
-    CharLinkedList a;
-    a.insertAt('b', 0);
-    a.insertInOrder('a');
-    // a.removeAt(1);
-    a.insertInOrder('p');
-    
-    CharLinkedList copy;
-    copy = a;
-    cout << copy.toString() << endl;
-    // copy.replaceAt('z', 0);
-    // copy.concatenate(copy);
-    // CharLinkedList q(a);
-    while (a.size() > 0) 
-    { 
-        a.popFromBack(); 
-        cout << a.toString() << endl;
-    }
+    char abc[] = "abc";
+    CharLinkedList ll1(abc, 3);
+    cout << ll1.toString() << endl;
 
+    char xyz[] = "xyz";
+    CharLinkedList ll2;
+    ll2 = CharLinkedList(xyz, 3);
+
+    CharLinkedList t('t');
+    t.insertAt('a', 1);
+    t.insertAt('e', 1);
+    t.insertAt('l', 1);
+    cout << t.toString() << endl;
+    // ll2.concatenate(&ll1);
+    // cout << ll2.toString() << endl;
 
     /*
     char followX[] = {'0', '1', '2', '3', 'X', '5', '6', '7', '8'};

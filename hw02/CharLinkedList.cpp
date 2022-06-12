@@ -195,16 +195,17 @@ void CharLinkedList::insertAt(char c, int index)
         string msg = "index (" + to_string(index) + ") is not in range [0.." + to_string(size()) + "]";
         throw std::range_error(msg);
     }
+    
     if (length == 0)
     {
-        length = 1;
         Node * node  = new Node{c};
         front = back = node;
+        length = 1;
         return;
     }
     else if (index == size()) { pushAtBack(c);  }
     else if (index == 0) { pushAtFront(c); }
-    else // test: does this work with length = 1 ?
+    else // bug: index size - 1
     {
         Node * newNode = new Node{c};
         Node * prevNode = getNode(index - 1);
@@ -213,6 +214,7 @@ void CharLinkedList::insertAt(char c, int index)
         Node * nextNode = getNode(index + 1);
         newNode->next = nextNode;
         nextNode->prev = newNode;
+        cout << prevNode->data << newNode->data << nextNode->data << endl;
         length++;
     }
 }
@@ -250,10 +252,19 @@ void CharLinkedList::popFromFront()
     {
         throw std::runtime_error("cannot pop from empty LinkedList");
     }
-    Node * newFront = front->next;
-    delete front;
-    length--;
-    front = newFront;
+    else if (length == 1) 
+    {
+        clear();
+        return;
+    }
+    else 
+    {
+        Node * newFront = front->next;
+        delete front;
+        length--;
+        front = newFront;
+        front->prev = nullptr;
+    }
 }
 //A popFromBack function that takes no parameters and has void return type. It removes the last element from the list. If the list is empty, the function should throw a C++ std::runtime_error exception with message “cannot pop from empty LinkedList”.
 void CharLinkedList::popFromBack()
@@ -262,11 +273,20 @@ void CharLinkedList::popFromBack()
     {
         throw std::runtime_error("cannot pop from empty LinkedList");
     }
-    Node * newBack = back->prev;
-    cout << "popping: " << back->data << " ";
-    delete back;
-    length--;
-    back = newBack;
+    else if (length == 1) 
+    {
+        clear();
+        return;
+    }
+    else 
+    {
+        Node * newBack = back->prev;
+        delete back;
+        length--;
+        back = newBack;
+        back->next = nullptr;
+    }
+   
 }
 
 //A removeAt function that takes an integer index and has void return type. It removes the element at the specified index. If the index is out of range it should throw a C++ std::range_error exception with message “index (IDX) not in range [0..SIZE)” where IDX is the input index and SIZE is the size of the list.
@@ -313,12 +333,15 @@ void CharLinkedList::replaceAt(char c, int index)
 void CharLinkedList::concatenate(CharLinkedList *other) 
 {
     if (other->length == 0) return;
+    
     if (this->length == 0) 
     {
-        Node * node = new Node{other->front->data};
-        front = back = node;
+        this->front = copyRec(other->front, nullptr);
     }
-    this->back->next = copyRec(other->front, this->back);
+    else 
+    {
+        this->back->next = copyRec(other->front, this->back);
+    }
     this->length += other->length;
 }
 
@@ -326,7 +349,7 @@ void CharLinkedList::concatenate(CharLinkedList *other)
 // HELPER FUNCTIONS
 // ****************
 
-//helper function for destructor that recursively deletes node data of each node.
+//helper function for destructor that recursively deletes a linked list starting from a head node.
 void CharLinkedList::destroy(Node *node) 
 {
     if (node == nullptr) return;
@@ -340,7 +363,7 @@ void CharLinkedList::destroy(Node *node)
 CharLinkedList::Node* CharLinkedList::copyRec(Node *node, Node *pnode)
 {
     if (node == nullptr) return nullptr;
-
+    // cout << node->data;
     Node * newNode = new Node{node->data};
     newNode->prev = pnode;
     newNode->next = copyRec(node->next, newNode);
