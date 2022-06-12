@@ -172,8 +172,11 @@ void CharLinkedList::clear()
 //A pushAtBack function that takes an element (char) and has a void return type. It inserts the given new element after the end of the existing elements of the list.
 void CharLinkedList::pushAtBack(char c)
 {
-    Node * node = new Node{c, nullptr, back};
-    if (back) { back->next = node; }
+    cout << "   pushing at back: " << c << endl;
+    Node * node = new Node{c, nullptr};
+    if (isEmpty()) { front = node; }
+    back->next = node;
+    node->prev = back;
     back = node;
     length++;
 }
@@ -181,8 +184,11 @@ void CharLinkedList::pushAtBack(char c)
 //A pushAtFront function that takes an element (char) and has a void return type. It inserts the given new element in front of the existing elements of the list.
 void CharLinkedList::pushAtFront(char c)
 {
-    Node * node = new Node{c, front, nullptr};
-    if (front) { front->prev = node; }
+    cout << "   pushing at front: " << c << endl;
+    Node * node = new Node{c};
+    if (isEmpty()) { back = node; }
+    node->prev  = nullptr;
+    front->next = node;
     front = node;
     length++;
 }
@@ -190,32 +196,32 @@ void CharLinkedList::pushAtFront(char c)
 //An insertAt function that takes an element (char) and an integer index as parameters and has a void return type. It inserts the new element at the specified index. The new element is then in the index-th position. If the index is out of range it should throw a C++ std::range_error exception with the message “index (IDX) not in range [0..SIZE]” where IDX is the index that was given and SIZE is the size of the list.
 void CharLinkedList::insertAt(char c, int index)
 {
+    cout << "inserting " << c << endl;
     if (index < 0 || index > size())
     {
         string msg = "index (" + to_string(index) + ") is not in range [0.." + to_string(size()) + "]";
         throw std::range_error(msg);
     }
-    
     if (length == 0)
     {
-        Node * node  = new Node{c};
-        front = back = node;
+        front  = new Node{c};
+        back   = front;
         length = 1;
         return;
     }
     else if (index == size()) { pushAtBack(c);  }
     else if (index == 0) { pushAtFront(c); }
-    else // bug: index size - 1
+    else // inserting between front and back nodes
     {
-        Node * newNode = new Node{c};
+        cout << " getting prevNode..." << endl;
         Node * prevNode = getNode(index - 1);
-        newNode->prev = prevNode;
+        cout << " getting nextNode..." << endl;
+        Node * nextNode = getNode(index);
+        Node * newNode  = new Node{c, nextNode, prevNode};
         prevNode->next = newNode;
-        Node * nextNode = getNode(index + 1);
-        newNode->next = nextNode;
         nextNode->prev = newNode;
-        cout << prevNode->data << newNode->data << nextNode->data << endl;
         length++;
+        cout << toString() << endl;//
     }
 }
 
@@ -225,12 +231,10 @@ void CharLinkedList::insertInOrder(char c)
     if (length == 0) 
     {
         Node * node = new Node{c};
-        front  = node;
-        back   = node;
+        front  = back = node;
         length = 1;
         return;
     }
-
     Node * greater = front;
     char data = greater->data;
     for (int i = 1; i < size(); i++)
@@ -245,17 +249,16 @@ void CharLinkedList::insertInOrder(char c)
     }
     pushAtBack(c);
 }
-//A popFromFront function that takes no parameters and has void return type. It removes the first element from the list. If the list is empty, it should throw a C++ std::runtime_error exception with message“cannot pop from empty LinkedList”.
+//A popFromFront function that takes no parameters and has void return type. It removes the first element from the list. If the list is empty, it should throw a C++ std::runtime_error exception with message “cannot pop from empty LinkedList”.
 void CharLinkedList::popFromFront() 
 {
     if (isEmpty()) 
-    {
-        throw std::runtime_error("cannot pop from empty LinkedList");
+    { 
+        throw std::runtime_error("cannot pop from empty LinkedList"); 
     }
     else if (length == 1) 
     {
         clear();
-        return;
     }
     else 
     {
@@ -276,7 +279,6 @@ void CharLinkedList::popFromBack()
     else if (length == 1) 
     {
         clear();
-        return;
     }
     else 
     {
@@ -286,7 +288,6 @@ void CharLinkedList::popFromBack()
         back = newBack;
         back->next = nullptr;
     }
-   
 }
 
 //A removeAt function that takes an integer index and has void return type. It removes the element at the specified index. If the index is out of range it should throw a C++ std::range_error exception with message “index (IDX) not in range [0..SIZE)” where IDX is the input index and SIZE is the size of the list.
@@ -299,10 +300,10 @@ void CharLinkedList::removeAt(int index)
     }
     if (index == 0) { popFromFront(); }
     else if (index == size() - 1) { popFromBack(); }
-    else 
+    else // index is neither front nor back of list 
     {
         Node * rem = getNode(index);
-        if (length > 1) //  length > 2 ?
+        if (length > 1)
         {
             rem->prev->next = rem->next;
             rem->next->prev = rem->prev;
@@ -374,23 +375,26 @@ CharLinkedList::Node* CharLinkedList::copyRec(Node *node, Node *pnode)
 
 // private helper function to efficiently retrieve the node specified by an index in a linked list. Returns a pointer to a node if index in bounds, else a nullptr. This function can only ever be called by functions with error checking on index. 
 CharLinkedList::Node * CharLinkedList::getNode(int index) const
-{
-    if (index >= size() || index < 0) 
+{ 
+    cout << "-->from index " << index;
+    if (index >= length || index < 0) 
     {
+        // cout << "returning nullptr." << endl;
         return nullptr;
     }
     Node * node;
     if (index > length/2) 
-        {
-            node = back;
-            for (int i = length; i > index; i--)
-            { node = node->prev; }
-        }
+    {
+        node = back;
+        for (int i = length - 1; i > index; i--)
+        { node = node->prev; }
+    }
     else 
     { 
         node = front; 
         for (int i = 0; i < index; i++) 
         { node = node->next; }
     }
+    cout << ", got " << node->data << endl;
     return node;
 }

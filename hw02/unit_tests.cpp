@@ -15,20 +15,17 @@ using namespace std;
 
 int main() {
     cout << "bismillah..." << endl;
-    
+    char test[] = "test";
+    CharLinkedList t(test, 4);
+
     char abc[] = "abc";
     CharLinkedList ll1(abc, 3);
-    cout << ll1.toString() << endl;
-
-    char xyz[] = "xyz";
-    CharLinkedList ll2;
-    ll2 = CharLinkedList(xyz, 3);
-
-    CharLinkedList t('t');
-    t.insertAt('a', 1);
-    t.insertAt('e', 1);
-    t.insertAt('l', 1);
+    t.concatenate(&ll1);
     cout << t.toString() << endl;
+
+    // char xyz[] = "xyz";
+    // CharLinkedList ll2;
+    // ll2 = CharLinkedList(xyz, 3);
     // ll2.concatenate(&ll1);
     // cout << ll2.toString() << endl;
 
