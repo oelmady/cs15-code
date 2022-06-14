@@ -172,7 +172,6 @@ void CharLinkedList::clear()
 //A pushAtBack function that takes an element (char) and has a void return type. It inserts the given new element after the end of the existing elements of the list.
 void CharLinkedList::pushAtBack(char c)
 {
-    cout << "   pushing at back: " << c << endl;
     Node * node = new Node{c, nullptr};
     if (isEmpty()) { front = node; }
     back->next = node;
@@ -184,7 +183,6 @@ void CharLinkedList::pushAtBack(char c)
 //A pushAtFront function that takes an element (char) and has a void return type. It inserts the given new element in front of the existing elements of the list.
 void CharLinkedList::pushAtFront(char c)
 {
-    cout << "   pushing at front: " << c << endl;
     Node * node = new Node{c};
     if (isEmpty()) { back = node; }
     node->prev  = nullptr;
@@ -196,7 +194,6 @@ void CharLinkedList::pushAtFront(char c)
 //An insertAt function that takes an element (char) and an integer index as parameters and has a void return type. It inserts the new element at the specified index. The new element is then in the index-th position. If the index is out of range it should throw a C++ std::range_error exception with the message “index (IDX) not in range [0..SIZE]” where IDX is the index that was given and SIZE is the size of the list.
 void CharLinkedList::insertAt(char c, int index)
 {
-    cout << "inserting " << c << endl;
     if (index < 0 || index > size())
     {
         string msg = "index (" + to_string(index) + ") is not in range [0.." + to_string(size()) + "]";
@@ -213,15 +210,12 @@ void CharLinkedList::insertAt(char c, int index)
     else if (index == 0) { pushAtFront(c); }
     else // inserting between front and back nodes
     {
-        cout << " getting prevNode..." << endl;
         Node * prevNode = getNode(index - 1);
-        cout << " getting nextNode..." << endl;
         Node * nextNode = getNode(index);
         Node * newNode  = new Node{c, nextNode, prevNode};
         prevNode->next = newNode;
         nextNode->prev = newNode;
         length++;
-        cout << toString() << endl;//
     }
 }
 
@@ -335,13 +329,21 @@ void CharLinkedList::concatenate(CharLinkedList *other)
 {
     if (other->length == 0) return;
     
-    if (this->length == 0) 
+    else if (this->length == 0) 
     {
         this->front = copyRec(other->front, nullptr);
     }
     else 
     {
-        this->back->next = copyRec(other->front, this->back);
+        Node * head = new Node{other->front->data, nullptr, this->back};
+        this->back->next = head;
+        Node * p = other->front->next;
+        while (p != nullptr)
+        {
+            head->next = new Node{p->data, nullptr, head};
+            p = p->next;
+            head = head->next;
+        }
     }
     this->length += other->length;
 }
@@ -364,22 +366,18 @@ void CharLinkedList::destroy(Node *node)
 CharLinkedList::Node* CharLinkedList::copyRec(Node *node, Node *pnode)
 {
     if (node == nullptr) return nullptr;
-    // cout << node->data;
     Node * newNode = new Node{node->data};
     newNode->prev = pnode;
     newNode->next = copyRec(node->next, newNode);
-    back = newNode;
+    if (newNode->next == nullptr) {this->back = newNode;}
     return newNode;
 }
-
 
 // private helper function to efficiently retrieve the node specified by an index in a linked list. Returns a pointer to a node if index in bounds, else a nullptr. This function can only ever be called by functions with error checking on index. 
 CharLinkedList::Node * CharLinkedList::getNode(int index) const
 { 
-    cout << "-->from index " << index;
     if (index >= length || index < 0) 
     {
-        // cout << "returning nullptr." << endl;
         return nullptr;
     }
     Node * node;
@@ -395,6 +393,5 @@ CharLinkedList::Node * CharLinkedList::getNode(int index) const
         for (int i = 0; i < index; i++) 
         { node = node->next; }
     }
-    cout << ", got " << node->data << endl;
     return node;
 }

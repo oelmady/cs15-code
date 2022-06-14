@@ -1,0 +1,7 @@
+Passenger 1 left train at station Riverway
+Passenger 5 left train at station Riverway
+Passenger 6 left train at station Mission Park
+Passenger 2 left train at station Fenwood Rd
+Passenger 3 left train at station Longwood Medical
+Passenger 7 left train at station Museum of Fine Arts
+Passenger 4 left train at station Prudential

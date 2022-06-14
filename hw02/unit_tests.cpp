@@ -15,51 +15,15 @@ using namespace std;
 
 int main() {
     cout << "bismillah..." << endl;
-    char test[] = "test";
-    CharLinkedList t(test, 4);
+    CharLinkedList t('t');
 
-    char abc[] = "abc";
-    CharLinkedList ll1(abc, 3);
-    t.concatenate(&ll1);
-    cout << t.toString() << endl;
+    char abby[] = "abbycat";
+    CharLinkedList ll1(abby, 7);
+    CharLinkedList ll2 = ll1;
+    cout << "testing cat" << endl;
+    t.concatenate(&ll2);
 
-    // char xyz[] = "xyz";
-    // CharLinkedList ll2;
-    // ll2 = CharLinkedList(xyz, 3);
-    // ll2.concatenate(&ll1);
-    // cout << ll2.toString() << endl;
-
-    /*
-    char followX[] = {'0', '1', '2', '3', 'X', '5', '6', '7', '8'};
-    CharLinkedList list1(followX, 9);
-    cout << list1.toString() << endl;
-
-    try
-    {
-        // test elementAt() while removing elements from front and back of 
-        // list. We keep track of the 'X' in the middle as we make each pass in
-        // the for loop.
-        for (int i = 0; i < 8; i++) {
-            if (i % 2 == 0) {
-                list1.popFromBack();
-                if (list1.elementAt(list1.size() / 2) != 'X') {
-                    throw std::runtime_error("elementAt() was incorrect!");
-                }
-            } else {
-                list1.popFromFront();
-                if (list1.elementAt((list1.size() / 2)) != 'X') {
-                    throw std::runtime_error("elementAt() was incorrect!");
-                }
-            }
-            cout << list1.toString() << endl;
-        }
-    }
-    catch(const std::runtime_error& e)
-    {
-        std::cerr << e.what() << '\n';
-        return 0;
-    }
-    */
+    cout << "printing t: " << t.toString() << endl;
 
     cout << "alhamdulillah!" << endl;
     return 0;

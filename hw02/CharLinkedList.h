@@ -74,6 +74,12 @@ private:
             next = pnext;
             prev = pprev;
         }
+        Node(Node *node)
+        {
+            data = node->data;
+            next = node->next;
+            prev = node->prev;
+        }
     };
     Node *front; 
     Node *back; 
