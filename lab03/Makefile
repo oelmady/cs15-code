@@ -43,9 +43,8 @@ LDFLAGS  = -g3
 # 
 #
 partyPlaylist: CircularBuffer.o Stack.o Queue.o main.o
-	${CXX} ${LDFLAGS} -o partyPlaylist CircularBuffer.o Stack.o \
-                                       Queue.o main.o
-
+	${CXX} ${LDFLAGS} -o partyPlaylist \
+	CircularBuffer.o Stack.o Queue.o main.o
 
 #
 # The following rules don't have recipes.  The make program has a ton
@@ -64,10 +63,9 @@ partyPlaylist: CircularBuffer.o Stack.o Queue.o main.o
 #
 
 CircularBuffer.o: CircularBuffer.cpp CircularBuffer.h
-Stack.o:    Stack.cpp    Stack.h   CircularBuffer.h
-Queue.o:    Queue.cpp    Queue.h   CircularBuffer.h
-main.o:             main.cpp             Stack.h   Queue.h     \
-                    CircularBuffer.h
+Stack.o: Stack.cpp Stack.h CircularBuffer.h
+Queue.o: Queue.cpp Queue.h CircularBuffer.h
+main.o:  main.cpp  Stack.h Queue.h CircularBuffer.h
 
 #
 # The following rules show how you can use make to automate things

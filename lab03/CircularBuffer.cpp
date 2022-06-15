@@ -30,12 +30,13 @@ using namespace std;
  */
 int CircularBuffer::nextIndex(int index)
 {
-        // TODO: Remove the code below and implement the function.
-        (void) index;
-        return 0;
+    return (index + 1) % capacity;
 }
 
-
+int CircularBuffer::prevIndex(int index)
+{
+	return (index - 1) % capacity;
+}
 /*  Purpose: Default constructor
  *  Notes:   INIT_CAPACITY is set to 5 in .h file
  */
@@ -81,12 +82,12 @@ CircularBuffer::~CircularBuffer()
  */
 void CircularBuffer::addAtBack(ElementType elem) 
 {
-        if (currentSize == capacity) {
-                expand();
-        }
-        bufferArray[back] = elem;
-        currentSize++;
-        back              = nextIndex(back);
+	if (currentSize == capacity - 1) {
+		expand();
+	}
+	bufferArray[back] = elem;
+	currentSize++;
+	back              = nextIndex(back);
 }
 
 /*  Purpose:    Add given element to the front of the list
@@ -95,8 +96,18 @@ void CircularBuffer::addAtBack(ElementType elem)
  */
 void CircularBuffer::addAtFront(ElementType elem) // STUDENT TODO:
 {
-        // TODO: Remove the code below and implement the function.
-        (void) elem;
+	if (currentSize == capacity - 1) {
+		expand(); 
+	}
+
+	if (currentSize == 0) {
+		back = nextIndex(back);
+	} else {
+		front = prevIndex(front);
+	}
+	bufferArray[front] = elem;
+	currentSize++;
+	
 }
                 
 /*  Purpose:    Remove the element at the back of the list and return it.
@@ -104,7 +115,13 @@ void CircularBuffer::addAtFront(ElementType elem) // STUDENT TODO:
  */
 ElementType CircularBuffer::removeFromBack() 
 {    
-        // TODO:
+	if (currentSize == 0) throw range_error("CircularBuffer::removeFromBack called when empty"); // should throw exception in real life
+	
+	back = prevIndex(back);
+	ElementType result = bufferArray[back];
+	bufferArray[back] = "";
+	currentSize--;
+	return result;
 }
 
 /*  Purpose:    Remove the element at the front of the list and return it.
@@ -112,7 +129,17 @@ ElementType CircularBuffer::removeFromBack()
  */
 ElementType CircularBuffer::removeFromFront() 
 {
-        // TODO:
+	if (currentSize == 0) throw range_error("CircularBuffer::removeFromFront called when empty");
+
+	ElementType result = bufferArray[front];
+	bufferArray[front] = "";
+	currentSize--;
+	if (currentSize == 0) { 
+		back = front; 
+	} else {
+		front = nextIndex(front);
+	}
+	return result;
 }
 
 /*  Purpose:    Expand the capacity of the array by a factor of 2 + 2.
@@ -124,7 +151,22 @@ ElementType CircularBuffer::removeFromFront()
  */
 void CircularBuffer::expand()
 {       
-        // TODO:
+	int newCap = capacity * 2 + 2;
+	int addedSpace = newCap - capacity;
+	ElementType *newBuffer = new ElementType[newCap];
+	for (int i = 0; i < capacity; i++)
+	{
+		if (i >= back) {
+			newBuffer[addedSpace + i] = bufferArray[i];
+		}
+		else {
+			newBuffer[i] = bufferArray[i];
+		}
+	}
+	delete [] bufferArray;
+	bufferArray = newBuffer;
+	capacity = newCap;
+	if (back < front) front += addedSpace;
 }
 
 /*  Purpose: Print the contents of the CircularBuffer, one element per line.
@@ -132,9 +174,9 @@ void CircularBuffer::expand()
  */ 
 void CircularBuffer::printBuffer() 
 {
-        int currIndex = front;
-        for (int i = 0; i < currentSize; i++) {
-                cout << i + 1 << ": " << bufferArray[currIndex] << endl;
-                currIndex = nextIndex(currIndex);
-        }
+	int currIndex = front;
+	for (int i = 0; i < currentSize; i++) {
+			cout << i + 1 << ": " << bufferArray[currIndex] << endl;
+			currIndex = nextIndex(currIndex);
+	}
 }

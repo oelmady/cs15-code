@@ -30,7 +30,6 @@ public:
         void        push(ElementType element);
 
         void        printStack();
-
 private:
         CircularBuffer stack;
 };

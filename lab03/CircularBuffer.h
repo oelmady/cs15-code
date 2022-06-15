@@ -30,7 +30,7 @@ public:
         void        addAtFront(ElementType elem);
         ElementType removeFromBack();
         ElementType removeFromFront();
-
+        
         void        printBuffer();
 
 private:
@@ -43,6 +43,7 @@ private:
         int              back;
 
         int  nextIndex(int index);
+        int  prevIndex(int index);
         void expand();
         void init(int givenCapacity);
 };

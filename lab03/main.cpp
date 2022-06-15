@@ -37,19 +37,21 @@ void testQueue(string songs[], int numSongs);
 
 int main() 
 {
-        string songs[10] = {"Dynamite", "Laugh Now Cry Later", "Rockstar", 
-                            "Blinding Lights", "Mood",
-                            "Watermelon Sugar", "What's Poppin", 
-                            "Savage Love", "Popstar", 
-                            "Before You"};
+        string songs[10] = {
+        "The Bigger Picture", 
+        "Laugh Now Cry Later", "Rockstar", 
+        "Blinding Lights", "Mood",
+        "Watermelon Sugar", "What's Poppin", 
+        "Savage Love", "Popstar", 
+        "Before You"};
 
         const int numSongs = sizeof(songs) / sizeof(string);
 
         testCircularBuffer(songs, numSongs);
 
         // Uncomment each test as you write each part 
-        // testStack(songs, numSongs);
-        // testQueue(songs, numSongs);
+        testStack(songs, numSongs);
+        testQueue(songs, numSongs);
 
         cout << "\n\t\t**** Wrap-Up Questions ****\n"
              << "In your opinion, which data structure is better for a DJ"
@@ -80,16 +82,23 @@ void testCircularBuffer(string songs[], int numSongs)
 
         CircularBuffer myBuffer(2);
 
-        myBuffer.addAtBack("Hello");
-        myBuffer.addAtBack("World");
-
-        // Uncomment to add all songs to myBuffer to test expand
-        // for (int i = 0; i < numSongs; i++) {
-        //         myBuffer.addAtBack(songs[i]);
-        // }
-        
+        for (int i = 0; i < numSongs; i++) {
+                myBuffer.addAtBack(songs[i]);
+        }
         cout << "Printing CircularBuffer:\n";
         myBuffer.printBuffer();
+/*
+1: The Bigger Picture
+2: Laugh Now Cry Later
+3: Rockstar
+4: Blinding Lights
+5: Mood
+6: Watermelon Sugar
+7: What's Poppin
+8: Savage Love
+9: Popstar
+10: Before You
+*/
 }
 
 /***********************************************************************

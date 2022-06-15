@@ -48,7 +48,8 @@ Queue::~Queue()
  */
 ElementType Queue::dequeue() 
 {
-        // TODO:
+    ElementType result = queue.removeFromFront();
+    return result;
 }
 
 /*
@@ -56,8 +57,7 @@ ElementType Queue::dequeue()
  */
 void Queue::enqueue(ElementType element)
 {
-        (void) element;
-        // TODO:
+    queue.addAtBack(element);
 }
 
 /*

@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include "Stack.h"
+#include "CircularBuffer.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ using namespace std;
  */
 Stack::Stack() 
 {
-        // The sequence is automatically initialized
+ // The sequence is automatically initialized
 }
 
 /*
@@ -37,7 +38,7 @@ Stack::Stack()
  */
 Stack::Stack(int initialCapacity) : stack(initialCapacity)
 {
-        // Work done in member initialization list
+ // Work done in member initialization list
 }
 
 /*
@@ -45,7 +46,7 @@ Stack::Stack(int initialCapacity) : stack(initialCapacity)
  */
 Stack::~Stack() 
 {
-        // nothing to do:  sequence destructor runs automatically
+// nothing to do:  sequence destructor runs automatically
 }
 
 /*
@@ -53,7 +54,8 @@ Stack::~Stack()
  */
 ElementType Stack::pop()
 {
-        // TODO:
+	ElementType result = stack.removeFromBack();
+	return result;
 }
 
 
@@ -63,9 +65,8 @@ ElementType Stack::pop()
  *  Notes:      ElementType is defined in .h file.
  */
 void Stack::push(ElementType element)
-{
-        (void) element;
-        // TODO:
+{ // private member of CircBuffer. but stack is a CircBuffer!
+	stack.addAtBack(element);
 }
 
 /*
@@ -73,5 +74,5 @@ void Stack::push(ElementType element)
  */
 void Stack::printStack() 
 {
-        stack.printBuffer();
+		stack.printBuffer();
 }
