@@ -123,7 +123,10 @@ void BST::inOrder()
 //
 void BST::inOrder(BSTNode *root)
 {
-        //TODO: your code here
+        if (root == nullptr) return;
+        inOrder(root->left);
+        cout << root->value << " ";
+        inOrder(root->right);
 }
 
 
@@ -161,6 +164,7 @@ void BST::postOrderDelete(BSTNode *root)
 void BST::preOrder()
 {
         preOrder(root);     // calls the next function (really needed?)
+        // a wrapper is not needed because the iterative function accesses all data directly
 }
 
 //
@@ -171,8 +175,23 @@ void BST::preOrder(BSTNode *root)
 {
         //preorder with a stack
         //TODO: stack defined here:
+        std::stack<BSTNode**> stack;
+        stack.push(&root);
+        BSTNode** top = stack.top();
+        BSTNode *node = *top;
+        while (!stack.empty()){
+                cout << node->value << " ";
+                stack.pop();
 
-        //TODO: your code here
+                if (node->right != nullptr){
+                        stack.push(&(node->right));
+                }
+                if (node->left != nullptr){
+                        stack.push(&(node->left));
+                }
+                top = stack.top();
+                node = *top;
+        }
 }
 
 
