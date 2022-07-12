@@ -12,7 +12,6 @@ Passenger 26 left train at station Museum of Fine Arts
 Passenger 7 left train at station Northeastern
 Passenger 27 left train at station Northeastern
 Passenger 8 left train at station Symphony
-Passenger 28 left train at station Symphony
 Passenger 9 left train at station Prudential
 Passenger 10 left train at station Copley
 Passenger 11 left train at station Arlington
@@ -31,6 +30,7 @@ Passenger 43 left train at station Brigham Circle
 Passenger 44 left train at station Longwood Medical
 Passenger 45 left train at station Museum of Fine Arts
 Passenger 46 left train at station Northeastern
+Passenger 28 left train at station Symphony
 Passenger 47 left train at station Symphony
 Passenger 29 left train at station Prudential
 Passenger 48 left train at station Prudential
@@ -47,14 +47,15 @@ Passenger 53 left train at station Government Center
 Passenger 35 left train at station Haymarket
 Passenger 54 left train at station Haymarket
 Passenger 36 left train at station North Station
-Passenger 55 left train at station North Station
 Passenger 37 left train at station Science Park
 Passenger 38 left train at station Lechmere
 Passenger 39 left train at station Union Square
 Passenger 40 left train at station East Somerville
 Passenger 41 left train at station Gilman Square
+Passenger 55 left train at station North Station
 Passenger 56 left train at station Science Park
 Passenger 57 left train at station Lechmere
 Passenger 58 left train at station Union Square
 Passenger 59 left train at station East Somerville
 Passenger 60 left train at station Gilman Square
+

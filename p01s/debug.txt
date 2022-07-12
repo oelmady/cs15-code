@@ -1,0 +1,23 @@
+compartments are vectors of pointers to passenger queues
+stations are vectors of pointers to passenger queues
+
+passenger queues are queues of pointers to passengers
+
+passengers are instances of a class with some data 
+
+metro contains compartments and stations 
+when the sim moves, metro calls in order:
+1. disembark
+2. move, which calls
+    3. board train
+4. print train
+
+metro sim operates on user interface to perform
+1. create new passengers, and assigns them the id
+2. moves the metro
+3. ends the simulation
+
+make the interface for std::cin and commands.txt first~
+then make the back end depending on the input requirements of the front end
+
+if not stream istream 
