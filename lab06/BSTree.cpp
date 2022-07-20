@@ -175,22 +175,20 @@ void BST::preOrder(BSTNode *root)
 {
         //preorder with a stack
         //TODO: stack defined here:
-        std::stack<BSTNode**> stack;
-        stack.push(&root);
-        BSTNode** top = stack.top();
-        BSTNode *node = *top;
+        if (root == nullptr) return;
+        std::stack<BSTNode*> stack;
+        stack.push(root);
+        BSTNode* node;
         while (!stack.empty()){
+                node = stack.top();
                 cout << node->value << " ";
                 stack.pop();
-
                 if (node->right != nullptr){
-                        stack.push(&(node->right));
+                        stack.push(node->right);
                 }
                 if (node->left != nullptr){
-                        stack.push(&(node->left));
+                        stack.push(node->left);
                 }
-                top = stack.top();
-                node = *top;
         }
 }
 
@@ -211,9 +209,22 @@ void BST::levelOrder()
 //
 void BST::levelOrder(BSTNode *root)
 {
-
+        if (root == nullptr) return;
         //TODO: Use a queue, declare it here
-
+        std::queue<BSTNode*> queue;
         //TODO: your code here
+        queue.push(root);
+        BSTNode* node;
+        while(!queue.empty()){
+                node = queue.front();                cout << node->value << " ";
+                
+                queue.pop();
 
+                if (node->left != nullptr){
+                        queue.push(node->left);
+                }
+                if (node->right != nullptr){
+                        queue.push(node->right);
+                }
+        }
 }
